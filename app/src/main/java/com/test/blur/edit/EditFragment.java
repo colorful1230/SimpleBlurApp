@@ -1,16 +1,19 @@
 package com.test.blur.edit;
 
+import android.app.Dialog;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
+import android.media.ThumbnailUtils;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AlertDialog;
 import android.support.v8.renderscript.Allocation;
 import android.support.v8.renderscript.Element;
 import android.support.v8.renderscript.RenderScript;
 import android.support.v8.renderscript.ScriptIntrinsicBlur;
-import android.util.Log;
+import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -34,13 +37,17 @@ public class EditFragment extends Fragment implements EditContract.View, SeekBar
 
     private ImageView mEditImageView;
 
-    private SeekBar mEditSeekBar;
+    private Dialog mSavingDialog;
 
     private EditContract.Presenter mPresenter;
 
-    private Bitmap mOriginalBitmap;
+    private Bitmap mScaleBitmap;
 
     private Bitmap mBlurBitmap;
+
+    private float mScale = 1f;
+
+    private int mCurrentBlurLevel = 0;
 
     public static EditFragment newInstance() {
         return new EditFragment();
@@ -51,7 +58,7 @@ public class EditFragment extends Fragment implements EditContract.View, SeekBar
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragmment_edit, container, false);
         mEditImageView = (ImageView) root.findViewById(R.id.edit_image_view);
-        mEditSeekBar = (SeekBar) root.findViewById(R.id.edit_seek_bar);
+        SeekBar mEditSeekBar = (SeekBar) root.findViewById(R.id.edit_seek_bar);
         mEditSeekBar.setMax(MAX_BLUR_RADIUS);
         mEditSeekBar.setOnSeekBarChangeListener(this);
         return root;
@@ -61,6 +68,14 @@ public class EditFragment extends Fragment implements EditContract.View, SeekBar
     public void onStart() {
         super.onStart();
         mPresenter.start();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (mCurrentBlurLevel > 1) {
+            setBlurRadius(mCurrentBlurLevel);
+        }
     }
 
     @Override
@@ -77,12 +92,18 @@ public class EditFragment extends Fragment implements EditContract.View, SeekBar
     public void showImage(Uri uri) {
         mEditImageView.setImageURI(uri);
         BitmapDrawable drawable = (BitmapDrawable) mEditImageView.getDrawable();
-        mOriginalBitmap = drawable.getBitmap();
+        Bitmap originalBitmap = drawable.getBitmap();
+        getScale(originalBitmap);
+
+        int originalWidth = originalBitmap.getWidth();
+        int originalHeight = originalBitmap.getHeight();
+        mScaleBitmap = ThumbnailUtils.extractThumbnail(originalBitmap, (int)(originalWidth * mScale),
+                (int)(originalHeight * mScale));
     }
 
     @Override
     public void setBlurRadius(int radius) {
-        mBlurBitmap = blurImage(mOriginalBitmap, radius);
+        mBlurBitmap = blurImage(mScaleBitmap, radius);
         mEditImageView.setImageBitmap(mBlurBitmap);
     }
 
@@ -93,7 +114,14 @@ public class EditFragment extends Fragment implements EditContract.View, SeekBar
     }
 
     @Override
+    public void showSaveDialog() {
+        mSavingDialog = new AlertDialog.Builder(getContext()).setTitle("saving").setMessage("saving image").create();
+        mSavingDialog.show();
+    }
+
+    @Override
     public void showSaveSuccess(String path) {
+        mSavingDialog.dismiss();
         Toast.makeText(getActivity(), path, Toast.LENGTH_LONG).show();
     }
 
@@ -113,7 +141,8 @@ public class EditFragment extends Fragment implements EditContract.View, SeekBar
 
     @Override
     public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-        mPresenter.setSeekProgress(progress + MIN_BLUR_RADIUS);
+        mCurrentBlurLevel = progress + MIN_BLUR_RADIUS;
+        mPresenter.setSeekProgress(mCurrentBlurLevel);
     }
 
     @Override
@@ -124,5 +153,26 @@ public class EditFragment extends Fragment implements EditContract.View, SeekBar
     @Override
     public void onStopTrackingTouch(SeekBar seekBar) {
 
+    }
+
+    private void getScale(Bitmap bitmap) {
+        int height = bitmap.getHeight();
+        int[] size = getScreenSize();
+        if (height <= size[1]) {
+            return;
+        }
+        mScale = size[1] * 1.0f / height;
+    }
+
+    private int[] getScreenSize() {
+        int[] size = new int[2];
+
+        DisplayMetrics metrics = new DisplayMetrics();
+        getActivity().getWindowManager().getDefaultDisplay().getRealMetrics(metrics);
+
+        size[0] = metrics.widthPixels;
+        size[1] = metrics.heightPixels;
+
+        return size;
     }
 }

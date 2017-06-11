@@ -28,6 +28,8 @@ public interface EditContract {
 
         Bitmap getBlurImage();
 
+        void showSaveDialog();
+
         void showSaveSuccess(String path);
     }
 }

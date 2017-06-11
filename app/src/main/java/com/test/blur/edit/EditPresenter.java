@@ -39,6 +39,7 @@ public class EditPresenter implements EditContract.Presenter {
     @NeedsPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)
     @Override
     public void saveImage() {
+        mView.showSaveDialog();
         new SaveImageTask().execute();
     }
 
