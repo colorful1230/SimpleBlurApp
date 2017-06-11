@@ -16,4 +16,15 @@
         android:background="@android:color/background_dark"
         android:alpha="0.7"/>
 
+    <TextView
+        android:id="@+id/edit_tip_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="12dp"
+        android:layout_above="@id/edit_seek_bar"
+        android:background="@android:color/background_dark"
+        android:alpha="0.7"
+        android:text="@string/edit_blur_level"
+        android:textColor="@android:color/white"/>
+
 </RelativeLayout>
