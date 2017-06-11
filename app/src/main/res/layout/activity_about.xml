@@ -23,14 +23,14 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:text="github"/>
+        android:text="@string/about_my_github"/>
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="32dp"
-        android:text="open source"/>
+        android:text="@string/about_open_source"/>
 
     <TextView
         android:layout_width="wrap_content"
@@ -38,6 +38,6 @@
         android:layout_gravity="center_horizontal"
         android:gravity="center_horizontal"
         android:layout_marginTop="16dp"
-        android:text="[matisse]https://github.com/zhihu/Matisse.git\n[permissionsdispatcher]https://github.com/hotchemi/PermissionsDispatcher.git"/>
+        android:text="@string/about_open_source_git"/>
 
 </LinearLayout>

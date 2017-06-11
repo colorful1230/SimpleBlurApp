@@ -87,7 +87,6 @@ public class EditActivity extends AppCompatActivity {
     private int getStatusBarHeight() {
         int resourceId = getResources().getIdentifier("status_bar_height", "dimen", "android");
         if (resourceId > 0) {
-            //根据资源ID获取响应的尺寸值
            return getResources().getDimensionPixelSize(resourceId);
         }
         return 0;

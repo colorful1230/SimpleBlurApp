@@ -8,7 +8,7 @@ public class SafeUtils {
 
     public static <T> T checkNotNull(T t) {
         if (t == null) {
-            new RuntimeException("");
+            throw new RuntimeException("The parameter must not be null");
         }
         return t;
     }

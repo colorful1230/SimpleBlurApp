@@ -2,4 +2,10 @@
     <string name="app_name">Simple Blur</string>
     <string name="title_activity_main">Blur</string>
     <string name="action_about">关于</string>
+
+    <string name="edit_save">保存</string>
+
+    <string name="about_my_github">https://github.com/zhaolin1230/SimpleBlurApp.git</string>
+    <string name="about_open_source">开源项目</string>
+    <string name="about_open_source_git">[matisse]\n[permissionsdispatcher]</string>
 </resources>

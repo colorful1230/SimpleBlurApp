@@ -113,7 +113,6 @@ public class EditFragment extends Fragment implements EditContract.View, SeekBar
 
     @Override
     public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-        Log.d(TAG, "onProgressChanged: " + progress);
         mPresenter.setSeekProgress(progress + MIN_BLUR_RADIUS);
     }
 
