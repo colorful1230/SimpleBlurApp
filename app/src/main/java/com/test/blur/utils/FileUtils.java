@@ -21,7 +21,7 @@ public class FileUtils {
 
     @Nullable
     public static String saveBitmap(Bitmap bitmap) {
-        String saveDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM)
+        String saveDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES)
                 .getAbsolutePath() + File.separator + "blur";
         File dir = new File(saveDir);
         if (!dir.exists()) {
