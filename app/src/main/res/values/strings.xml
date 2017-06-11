@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Blur</string>
-    <string name="title_activity_main">MainActivity</string>
-    <string name="action_settings">Settings</string>
+    <string name="app_name">Simple Blur</string>
+    <string name="title_activity_main">Blur</string>
+    <string name="action_about">关于</string>
 </resources>

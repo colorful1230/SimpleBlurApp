@@ -10,6 +10,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.test.blur.R;
+import com.test.blur.about.AboutActivity;
 import com.test.blur.utils.ActivityUtils;
 
 /**
@@ -47,6 +48,15 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        int itemId = item.getItemId();
+        switch (itemId) {
+            case R.id.action_about:
+                Intent intent = new Intent(this, AboutActivity.class);
+                startActivity(intent);
+                break;
+            default:
+                break;
+        }
         return super.onOptionsItemSelected(item);
     }
 
