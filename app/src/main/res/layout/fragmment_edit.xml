@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ImageView
+        android:id="@+id/edit_image_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    <SeekBar
+        android:id="@+id/edit_seek_bar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:layout_alignParentBottom="true"
+        android:background="@android:color/background_dark"
+        android:alpha="0.7"/>
+
+</RelativeLayout>
