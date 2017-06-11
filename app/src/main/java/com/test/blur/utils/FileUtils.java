@@ -1,20 +1,13 @@
 package com.test.blur.utils;
 
-import android.content.Context;
 import android.graphics.Bitmap;
-import android.icu.util.Calendar;
 import android.os.Environment;
 import android.support.annotation.Nullable;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.Locale;
-import java.util.SimpleTimeZone;
-import java.util.TimeZone;
 
 /**
  * Created by zhaolin on 17-6-11.
@@ -24,7 +17,7 @@ public class FileUtils {
 
     private static final String FILE_NAME_PREFIX = "blur_";
 
-    private static final String FILE_NAME_SUFFFIX = ".png";
+    private static final String FILE_NAME_SUFFIX = ".png";
 
     @Nullable
     public static String saveBitmap(Bitmap bitmap) {
@@ -38,7 +31,7 @@ public class FileUtils {
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         String date = dateFormat.format(new Date());
 
-        String name = saveDir + File.separator + FILE_NAME_PREFIX + date + FILE_NAME_SUFFFIX;
+        String name = saveDir + File.separator + FILE_NAME_PREFIX + date + FILE_NAME_SUFFIX;
         File file = new File(name);
         if (file != null) {
             FileOutputStream outputStream = null;

@@ -37,8 +37,6 @@ public class EditFragment extends Fragment implements EditContract.View, SeekBar
 
     private ImageView mEditImageView;
 
-    private Dialog mSavingDialog;
-
     private EditContract.Presenter mPresenter;
 
     private Bitmap mScaleBitmap;
@@ -48,6 +46,8 @@ public class EditFragment extends Fragment implements EditContract.View, SeekBar
     private float mScale = 1f;
 
     private int mCurrentBlurLevel = 0;
+
+    private Toast mSavingToast;
 
     public static EditFragment newInstance() {
         return new EditFragment();
@@ -115,14 +115,18 @@ public class EditFragment extends Fragment implements EditContract.View, SeekBar
 
     @Override
     public void showSaveDialog() {
-        mSavingDialog = new AlertDialog.Builder(getContext()).setTitle("saving").setMessage("saving image").create();
-        mSavingDialog.show();
+        if (mSavingToast == null) {
+            mSavingToast = Toast.makeText(getActivity(), "saving...", Toast.LENGTH_SHORT);
+        }
+        mSavingToast.show();
     }
 
     @Override
     public void showSaveSuccess(String path) {
-        mSavingDialog.dismiss();
-        Toast.makeText(getActivity(), path, Toast.LENGTH_LONG).show();
+        if (mSavingToast != null) {
+            mSavingToast.cancel();
+        }
+        Toast.makeText(getActivity(), path, Toast.LENGTH_SHORT).show();
     }
 
     private Bitmap blurImage(Bitmap bitmap, int radius) {
