@@ -19,6 +19,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.SeekBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.test.blur.R;
@@ -49,6 +50,10 @@ public class EditFragment extends Fragment implements EditContract.View, SeekBar
 
     private Toast mSavingToast;
 
+    private SeekBar mEditSeekBar;
+
+    private TextView mTipTextView;
+
     public static EditFragment newInstance() {
         return new EditFragment();
     }
@@ -58,16 +63,16 @@ public class EditFragment extends Fragment implements EditContract.View, SeekBar
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragmment_edit, container, false);
         mEditImageView = (ImageView) root.findViewById(R.id.edit_image_view);
-        SeekBar mEditSeekBar = (SeekBar) root.findViewById(R.id.edit_seek_bar);
+        mEditSeekBar = (SeekBar) root.findViewById(R.id.edit_seek_bar);
         mEditSeekBar.setMax(MAX_BLUR_RADIUS);
         mEditSeekBar.setOnSeekBarChangeListener(this);
+        mTipTextView = (TextView) root.findViewById(R.id.edit_tip_text);
         return root;
     }
 
     @Override
     public void onStart() {
         super.onStart();
-        mPresenter.start();
     }
 
     @Override
@@ -90,6 +95,9 @@ public class EditFragment extends Fragment implements EditContract.View, SeekBar
 
     @Override
     public void showImage(Uri uri) {
+        mEditImageView.setVisibility(View.VISIBLE);
+        mEditSeekBar.setVisibility(View.VISIBLE);
+        mTipTextView.setVisibility(View.VISIBLE);
         mEditImageView.setImageURI(uri);
         BitmapDrawable drawable = (BitmapDrawable) mEditImageView.getDrawable();
         Bitmap originalBitmap = drawable.getBitmap();

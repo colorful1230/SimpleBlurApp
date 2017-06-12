@@ -5,6 +5,7 @@
 
     <string name="choose_tip">点击任意区域选择图片</string>
     <string name="edit_save">保存</string>
+    <string name="edit_open">选择</string>
     <string name="edit_blur_level">模糊度</string>
 
     <string name="about_my_github">https://github.com/zhaolin1230/SimpleBlurApp.git</string>

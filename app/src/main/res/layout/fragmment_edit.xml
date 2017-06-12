@@ -3,10 +3,20 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <TextView
+        android:id="@+id/choose_tip_text_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:gravity="center"
+        android:text="@string/choose_tip"
+        android:textSize="18sp"/>
+
     <ImageView
         android:id="@+id/edit_image_view"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        android:visibility="gone"/>
 
     <SeekBar
         android:id="@+id/edit_seek_bar"
@@ -14,7 +24,8 @@
         android:layout_height="?attr/actionBarSize"
         android:layout_alignParentBottom="true"
         android:background="@android:color/background_dark"
-        android:alpha="0.7"/>
+        android:alpha="0.7"
+        android:visibility="gone"/>
 
     <TextView
         android:id="@+id/edit_tip_text"
@@ -25,6 +36,7 @@
         android:background="@android:color/background_dark"
         android:alpha="0.7"
         android:text="@string/edit_blur_level"
-        android:textColor="@android:color/white"/>
+        android:textColor="@android:color/white"
+        android:visibility="gone"/>
 
 </RelativeLayout>

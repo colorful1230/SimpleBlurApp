@@ -1,6 +1,8 @@
 package com.test.blur.edit;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.net.Uri;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -15,8 +17,17 @@ import android.widget.RelativeLayout;
 import com.test.blur.R;
 import com.test.blur.data.ImageInfo;
 import com.test.blur.utils.ActivityUtils;
+import com.zhihu.matisse.Matisse;
+import com.zhihu.matisse.MimeType;
+import com.zhihu.matisse.engine.impl.PicassoEngine;
+
+import java.util.List;
+
+import permissions.dispatcher.NeedsPermission;
 
 public class EditActivity extends AppCompatActivity {
+
+    private static final int REQUEST_CODE_CHOOSE = 23;
 
     private EditContract.Presenter mPresenter;
 
@@ -26,12 +37,6 @@ public class EditActivity extends AppCompatActivity {
         setContentView(R.layout.activity_edit);
         initToolbar();
 
-        Intent intent = getIntent();
-        Uri uri = null;
-        if (intent != null) {
-            uri = intent.getParcelableExtra("extra");
-        }
-
         EditFragment editFragment = (EditFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.edit_content_frame);
         if (editFragment == null) {
@@ -40,8 +45,7 @@ public class EditActivity extends AppCompatActivity {
                     R.id.edit_content_frame);
         }
 
-        ImageInfo imageInfo = new ImageInfo(uri);
-        mPresenter = new EditPresenter(editFragment, imageInfo);
+        mPresenter = new EditPresenter(editFragment);
     }
 
     private void initToolbar() {
@@ -78,10 +82,38 @@ public class EditActivity extends AppCompatActivity {
             case R.id.edit_save_item:
                 mPresenter.saveImage();
                 break;
+            case R.id.edit_open_item:
+                gotoMatisse();
+                break;
             default:
                 break;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == REQUEST_CODE_CHOOSE && resultCode == RESULT_OK) {
+            List<Uri> selected = Matisse.obtainResult(data);
+            if (selected != null && selected.size() > 0) {
+                Uri uri = selected.get(0);
+                ImageInfo imageInfo = new ImageInfo(uri);
+                mPresenter.showImage(imageInfo);
+            }
+        }
+    }
+
+    @NeedsPermission(Manifest.permission.READ_EXTERNAL_STORAGE)
+    private void gotoMatisse() {
+        Matisse.from(this)
+                .choose(MimeType.allOf())
+                .countable(true)
+                .maxSelectable(1)
+                .restrictOrientation(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED)
+                .thumbnailScale(0.85f)
+                .imageEngine(new PicassoEngine())
+                .forResult(REQUEST_CODE_CHOOSE);
     }
 
     private int getStatusBarHeight() {

@@ -18,17 +18,14 @@ public class EditPresenter implements EditContract.Presenter {
 
     private EditContract.View mView;
 
-    private ImageInfo mImageInfo;
-
-    public EditPresenter(EditContract.View mView, ImageInfo imageInfo) {
+    public EditPresenter(EditContract.View mView) {
         this.mView = mView;
-        this.mImageInfo = imageInfo;
         mView.setPresenter(this);
     }
 
     @Override
     public void start() {
-        mView.showImage(mImageInfo.getUri());
+
     }
 
     @Override
@@ -41,6 +38,11 @@ public class EditPresenter implements EditContract.Presenter {
     public void saveImage() {
         mView.showSaveDialog();
         new SaveImageTask().execute();
+    }
+
+    @Override
+    public void showImage(ImageInfo imageInfo) {
+        mView.showImage(imageInfo.getUri());
     }
 
     private class SaveImageTask extends AsyncTask<Void, Void, String> {

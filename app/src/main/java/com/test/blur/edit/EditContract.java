@@ -5,6 +5,7 @@ import android.net.Uri;
 
 import com.test.blur.BasePresenter;
 import com.test.blur.BaseView;
+import com.test.blur.data.ImageInfo;
 
 /**
  * Created by zhaolin on 17-6-11.
@@ -17,6 +18,8 @@ public interface EditContract {
         void setSeekProgress(int progress);
 
         void saveImage();
+
+        void showImage(ImageInfo imageInfo);
 
     }
 
