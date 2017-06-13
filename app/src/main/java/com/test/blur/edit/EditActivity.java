@@ -3,18 +3,17 @@ package com.test.blur.edit;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
+import android.graphics.Color;
 import android.net.Uri;
-import android.support.v7.app.ActionBar;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.view.WindowManager;
-import android.widget.RelativeLayout;
 
 import com.test.blur.R;
+import com.test.blur.about.AboutActivity;
 import com.test.blur.data.ImageInfo;
 import com.test.blur.utils.ActivityUtils;
 import com.zhihu.matisse.Matisse;
@@ -24,13 +23,18 @@ import com.zhihu.matisse.engine.impl.PicassoEngine;
 import java.util.List;
 
 import permissions.dispatcher.NeedsPermission;
+import permissions.dispatcher.RuntimePermissions;
 
+@RuntimePermissions
 public class EditActivity extends AppCompatActivity {
 
     private static final int REQUEST_CODE_CHOOSE = 23;
 
     private EditContract.Presenter mPresenter;
 
+    private Toolbar mToolbar;
+
+    @NeedsPermission(Manifest.permission.READ_EXTERNAL_STORAGE)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -49,24 +53,8 @@ public class EditActivity extends AppCompatActivity {
     }
 
     private void initToolbar() {
-        Toolbar toolbar = (Toolbar) findViewById(R.id.edit_tool_bar);
-        setSupportActionBar(toolbar);
-        ActionBar actionBar = getSupportActionBar();
-        if (actionBar != null) {
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-            toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    finish();
-                }
-            });
-        }
-
-        getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-        int statusBarHeight = getStatusBarHeight();
-        RelativeLayout.LayoutParams lp = (RelativeLayout.LayoutParams) toolbar.getLayoutParams();
-        lp.topMargin = statusBarHeight;
-        toolbar.setLayoutParams(lp);
+        mToolbar = (Toolbar) findViewById(R.id.edit_tool_bar);
+        setSupportActionBar(mToolbar);
     }
 
     @Override
@@ -85,6 +73,9 @@ public class EditActivity extends AppCompatActivity {
             case R.id.edit_open_item:
                 gotoMatisse();
                 break;
+            case R.id.edit_about:
+                Intent intent = new Intent(this, AboutActivity.class);
+                startActivity(intent);
             default:
                 break;
         }
@@ -95,6 +86,9 @@ public class EditActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == REQUEST_CODE_CHOOSE && resultCode == RESULT_OK) {
+            mToolbar.setBackgroundColor(Color.TRANSPARENT);
+            getWindow().getDecorView().setBackgroundColor(Color.BLACK);
+
             List<Uri> selected = Matisse.obtainResult(data);
             if (selected != null && selected.size() > 0) {
                 Uri uri = selected.get(0);
@@ -104,8 +98,13 @@ public class EditActivity extends AppCompatActivity {
         }
     }
 
-    @NeedsPermission(Manifest.permission.READ_EXTERNAL_STORAGE)
-    private void gotoMatisse() {
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        EditActivityPermissionsDispatcher.onRequestPermissionsResult(this, requestCode, grantResults);
+    }
+
+    public void gotoMatisse() {
         Matisse.from(this)
                 .choose(MimeType.allOf())
                 .countable(true)
@@ -116,11 +115,4 @@ public class EditActivity extends AppCompatActivity {
                 .forResult(REQUEST_CODE_CHOOSE);
     }
 
-    private int getStatusBarHeight() {
-        int resourceId = getResources().getIdentifier("status_bar_height", "dimen", "android");
-        if (resourceId > 0) {
-           return getResources().getDimensionPixelSize(resourceId);
-        }
-        return 0;
-    }
 }
