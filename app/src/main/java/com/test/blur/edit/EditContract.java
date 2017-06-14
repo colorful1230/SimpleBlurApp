@@ -31,8 +31,10 @@ public interface EditContract {
 
         Bitmap getBlurImage();
 
-        void showSaveDialog();
+        void showSaveTip();
 
         void showSaveSuccess(String path);
+
+        void showNotEditTip();
     }
 }

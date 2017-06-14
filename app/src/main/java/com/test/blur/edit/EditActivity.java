@@ -34,6 +34,7 @@ public class EditActivity extends AppCompatActivity {
 
     private Toolbar mToolbar;
 
+    private boolean selected = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

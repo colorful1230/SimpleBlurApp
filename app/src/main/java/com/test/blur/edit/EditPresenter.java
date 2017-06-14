@@ -18,6 +18,8 @@ public class EditPresenter implements EditContract.Presenter {
 
     private EditContract.View mView;
 
+    private boolean mIsEdit = false;
+
     public EditPresenter(EditContract.View mView) {
         this.mView = mView;
         mView.setPresenter(this);
@@ -31,13 +33,18 @@ public class EditPresenter implements EditContract.Presenter {
     @Override
     public void setSeekProgress(int progress) {
         mView.setBlurRadius(progress);
+        mIsEdit = progress > 1;
     }
 
     @NeedsPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)
     @Override
     public void saveImage() {
-        mView.showSaveDialog();
-        new SaveImageTask().execute();
+        if (mIsEdit) {
+            mView.showSaveTip();
+            new SaveImageTask().execute();
+        } else {
+            mView.showNotEditTip();
+        }
     }
 
     @Override

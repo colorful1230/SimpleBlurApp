@@ -125,9 +125,10 @@ public class EditFragment extends Fragment implements EditContract.View, SeekBar
     }
 
     @Override
-    public void showSaveDialog() {
+    public void showSaveTip() {
         if (mSavingToast == null) {
-            mSavingToast = Toast.makeText(getActivity(), "saving...", Toast.LENGTH_SHORT);
+            mSavingToast = Toast.makeText(getActivity(), getActivity().getResources().getString(R.string.edit_saving),
+                    Toast.LENGTH_SHORT);
         }
         mSavingToast.show();
     }
@@ -137,7 +138,14 @@ public class EditFragment extends Fragment implements EditContract.View, SeekBar
         if (mSavingToast != null) {
             mSavingToast.cancel();
         }
-        Toast.makeText(getActivity(), path, Toast.LENGTH_SHORT).show();
+        Toast.makeText(getActivity(), getActivity().getResources().getString(R.string.edit_saved) + path,
+                Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void showNotEditTip() {
+        Toast.makeText(getActivity(), getActivity().getResources().getString(R.string.edit_not_edit),
+                Toast.LENGTH_SHORT).show();
     }
 
     private void blurImage(Bitmap bitmap, int radius) {
