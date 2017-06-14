@@ -14,6 +14,7 @@ import android.support.v8.renderscript.Element;
 import android.support.v8.renderscript.RenderScript;
 import android.support.v8.renderscript.ScriptIntrinsicBlur;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -107,11 +108,13 @@ public class EditFragment extends Fragment implements EditContract.View, SeekBar
         int originalHeight = originalBitmap.getHeight();
         mScaleBitmap = ThumbnailUtils.extractThumbnail(originalBitmap, (int)(originalWidth * mScale),
                 (int)(originalHeight * mScale));
+        mBlurBitmap = Bitmap.createBitmap(mScaleBitmap.getWidth(), mScaleBitmap.getHeight(),
+                Bitmap.Config.ARGB_8888);
     }
 
     @Override
     public void setBlurRadius(int radius) {
-        mBlurBitmap = blurImage(mScaleBitmap, radius);
+        blurImage(mScaleBitmap, radius);
         mEditImageView.setImageBitmap(mBlurBitmap);
     }
 
@@ -137,18 +140,19 @@ public class EditFragment extends Fragment implements EditContract.View, SeekBar
         Toast.makeText(getActivity(), path, Toast.LENGTH_SHORT).show();
     }
 
-    private Bitmap blurImage(Bitmap bitmap, int radius) {
-        Bitmap output = bitmap.copy(bitmap.getConfig(), true);
+    private void blurImage(Bitmap bitmap, int radius) {
+        long start = System.currentTimeMillis();
         RenderScript rs = RenderScript.create(getActivity());
         ScriptIntrinsicBlur script = ScriptIntrinsicBlur.create(rs, Element.U8_4(rs));
         Allocation allIn = Allocation.createFromBitmap(rs, bitmap);
-        Allocation allOut = Allocation.createFromBitmap(rs, output);
+        Allocation allOut = Allocation.createFromBitmap(rs, mBlurBitmap);
         script.setRadius(radius);
         script.setInput(allIn);
         script.forEach(allOut);
-        allOut.copyTo(output);
+        allOut.copyTo(mBlurBitmap);
         rs.destroy();
-        return output;
+        long end = System.currentTimeMillis();
+        Log.d(TAG, "blurImage: " + (end - start));
     }
 
     @Override
