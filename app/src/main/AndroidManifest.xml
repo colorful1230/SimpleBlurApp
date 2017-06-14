@@ -24,8 +24,9 @@
         </activity>
 
         <activity android:name=".about.AboutActivity"
-            android:theme="@style/Theme.AppCompat.Light.DarkActionBar"
-            android:screenOrientation="portrait" />
+            android:theme="@style/AppTheme"
+            android:screenOrientation="portrait"
+            android:parentActivityName=".edit.EditActivity"/>
 
     </application>
 
