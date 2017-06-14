@@ -34,7 +34,7 @@ public class EditActivity extends AppCompatActivity {
 
     private Toolbar mToolbar;
 
-    @NeedsPermission(Manifest.permission.READ_EXTERNAL_STORAGE)
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -71,7 +71,7 @@ public class EditActivity extends AppCompatActivity {
                 mPresenter.saveImage();
                 break;
             case R.id.edit_open_item:
-                gotoMatisse();
+                EditActivityPermissionsDispatcher.gotoMatisseWithCheck(this);
                 break;
             case R.id.edit_about:
                 Intent intent = new Intent(this, AboutActivity.class);
@@ -104,6 +104,7 @@ public class EditActivity extends AppCompatActivity {
         EditActivityPermissionsDispatcher.onRequestPermissionsResult(this, requestCode, grantResults);
     }
 
+    @NeedsPermission(Manifest.permission.READ_EXTERNAL_STORAGE)
     public void gotoMatisse() {
         Matisse.from(this)
                 .choose(MimeType.allOf())
